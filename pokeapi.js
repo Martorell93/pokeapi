@@ -1,10 +1,15 @@
 //Función para coger la info del pokeapi
 async function infoPoke() {
+    let posicion1 = document.getElementById("nombreInfo");
+    let posicion2 = document.getElementById("habilidadesInfo");
+    let posicion3 = document.getElementById("imagenInfo");
+
+    if (posicion1 || posicion2 || posicion3) {
+        posicion1.remove();
+        posicion2.remove();
+        posicion3.remove();
+    }
     let id = document.getElementById("pokemon").value;
-    let cuerpo = document.createElement("tbody");
-    cuerpo.setAttribute("id", "cuerpo");
-    let posicion = document.getElementById("tabla");
-    posicion.appendChild(cuerpo);
 
     let url = `https://pokeapi.co/api/v2/pokemon/${id}/`;
 
@@ -18,35 +23,29 @@ async function infoPoke() {
         let data = await fetch(url, param);
         let result = await data.json();
 
-        let posicion = document.getElementById("cuerpo");
-        let row = document.createElement("tr");
-        let th = document.createElement("th");
-        th.setAttribute("scope", "row");
+        let posicionNombre = document.getElementById("nombre");
+        let th = document.createElement("p");
+        th.setAttribute("id", "nombreInfo");
         th.textContent = result.name;
-        let td1 = document.createElement("td");
-        let image = document.createElement("img");
-        image.setAttribute("src", result.sprites.front_default)
-        let td2 = document.createElement("td");
+        posicionNombre.appendChild(th);
+
+        let posicionHabilidades = document.getElementById("habilidades");
         let lista = document.createElement("ul");
-        td2.appendChild(lista);
+        lista.setAttribute("id", "habilidadesInfo")
         for (let i = 0; i < result.abilities.length; i++) {
             let punto = document.createElement("li");
-            punto.textContent = result.abilities[i].ability.name;
-            td2.appendChild(punto);
+            punto.textContent = " - " + result.abilities[i].ability.name;
+            lista.appendChild(punto);
         }
-        posicion.appendChild(row);
-        row.appendChild(th);
-        row.appendChild(td1);
-        td1.appendChild(image);
-        row.appendChild(td2); 
+        posicionHabilidades.appendChild(lista);
+
+        let posicionImagen = document.getElementById("imagen");
+        let image = document.createElement("img");
+        image.setAttribute("id", "imagenInfo");
+        image.setAttribute("src", result.sprites.front_default);
+        posicionImagen.appendChild(image); 
     }
     catch(error) {
         console.log(error);
     }
-}
-
-//Eliminar info
-function eliminarInfo() {
-    let posicion = document.getElementById("cuerpo");
-    posicion.remove();
 }
